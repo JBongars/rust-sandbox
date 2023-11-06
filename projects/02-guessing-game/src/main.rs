@@ -1,16 +1,15 @@
+use core::cmp::Ordering;
 use rand::Rng;
 use std::io;
 
 fn random_number_1_to_10() -> u16 {
-    let mut rng = rand::thread_rng();
-    return rng.gen_range(1..=10);
+    return rand::thread_rng().gen_range(1..=10);
 }
 
 fn main() {
     println!("Guess the number!");
 
     let correct_answer = random_number_1_to_10();
-    let mut is_correct: bool = false;
     let mut guess: String;
 
     loop {
@@ -20,27 +19,17 @@ fn main() {
         io::stdin()
             .read_line(&mut guess)
             .expect("Failed to read line");
-
-        let guess = guess.trim();
+        let guess_uint: u16 = guess.trim().parse().expect("Please type a number!");
 
         println!("You guessed: {guess}");
 
-        match guess.parse::<u16>() {
-            Ok(num) => {
-                if num != correct_answer {
-                    println!("Guess is incorrect! Try again...");
-                } else {
-                    is_correct = true;
-                }
+        match guess_uint.cmp(&correct_answer) {
+            Ordering::Less => println!("Too small!"),
+            Ordering::Greater => println!("Too big!"),
+            Ordering::Equal => {
+                println!("You win!");
+                break;
             }
-            Err(e) => {
-                println!("Invalid entry");
-                println!("error: {e}");
-            }
-        }
-
-        if is_correct {
-            break;
         }
     }
 

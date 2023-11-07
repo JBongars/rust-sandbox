@@ -6,6 +6,16 @@ fn random_number_1_to_10() -> u16 {
     return rand::thread_rng().gen_range(1..=10);
 }
 
+fn input_u16(message: String) -> u16 {
+    let mut user_input = String::new();
+    println!("{}", message);
+
+    io::stdin()
+        .read_line(&mut user_input)
+        .expect("Failed to read line");
+    user_input.trim().parse().expect("Please type a number")
+}
+
 fn main() {
     println!("Guess the number!");
 
@@ -14,12 +24,8 @@ fn main() {
 
     loop {
         guess = String::new();
-        println!("Please input your guess.");
-
-        io::stdin()
-            .read_line(&mut guess)
-            .expect("Failed to read line");
-        let guess_uint: u16 = guess.trim().parse().expect("Please type a number!");
+        let message = String::from("Please input your guess.");
+        let guess_uint: u16 = input_u16(message);
 
         println!("You guessed: {guess}");
 
